@@ -1,5 +1,4 @@
 prediction_1 = "";
-prediction_2 = "";
 
 Webcam.set
 (
@@ -25,7 +24,7 @@ function take_snapshot()
 
 console.log('ml5 version:', ml5.version);
 
-classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/5mxzZHkpx/model.json', modelLoaded);
+classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/oipkdHRNw/model.json', modelLoaded);
 
 function modelLoaded()
 {
@@ -41,9 +40,7 @@ function check()
 function speak()
 {
     var synth = window.speechSynthesis;
-    speak_data_1 = "The first prediction is " + prediction_1;
-    speak_data_2 = "And the second prediction is " + prediction_2;
-    var utterThis = new SpeechSynthesisUtterance(speak_data_1 + speak_data_2);
+    var utterThis = new SpeechSynthesisUtterance(speak_data);
     synth.speak(utterThis);
 }
 
@@ -55,36 +52,24 @@ function gotResult(error, results)
     {
         console.log(results);
         document.getElementById("result_emotion_name").innerHTML = results[0].label;
-        document.getElementById("result_emotion_name2").innerHTML = results[1].label;
         prediction_1 = results[0].label;
-        prediction_2 = results[1].label;
-        speak();
+        speak_data = "";
         
-        if (results[0].label == "happy")
+        if (prediction_1 == "Best")
         {
-            document.getElementById("update_emoji").innerHTML = "&#128512";
+            speak_data = "All the best";
+            document.getElementById("update_emoji").innerHTML = "&#128077;";
         }
-        if (results[0].label == "sad")
+        if (prediction_1 == "Amazing")
         {
-            document.getElementById("update_emoji").innerHTML = "&#128532";
+            speak_data = "This is looking amazing";
+            document.getElementById("update_emoji").innerHTML = "&#9996;";
         }
-        if (results[0].label == "angry")
+        if (prediction_1 == "Victory")
         {
-            document.getElementById("update_emoji").innerHTML = "&#128545";
+            speak_data = "That was a marvellous victory";
+            document.getElementById("update_emoji").innerHTML = "&#128076;";
         }
-
-
-        if (results[1].label == "happy")
-        {
-            document.getElementById("update_emoji2").innerHTML = "&#128512";
-        }
-        if (results[1].label == "sad")
-        {
-            document.getElementById("update_emoji2").innerHTML = "&#128532";
-        }
-        if (results[1].label == "angry")
-        {
-            document.getElementById("update_emoji2").innerHTML = "&#128545";
-        }
+        speak();
     }
 }
